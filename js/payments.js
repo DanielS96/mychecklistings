@@ -52,6 +52,7 @@ export function isPaid(id) {
 }
 
 export function needsPayment(checklist, category) {
+  if (FREE_MODE) return false; // ← Всё бесплатно
   if (!checklist) return false;
   if (isPaid(checklist.id)) return false;
   if (category && category.free_checklist === checklist.id) return false;
