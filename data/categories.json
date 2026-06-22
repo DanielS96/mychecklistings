@@ -1,0 +1,72 @@
+[
+  {
+    "id": "self-dev",
+    "title": "Саморазвитие",
+    "icon": "🧠",
+    "description": "Навыки, мышление и рост личности для достижения целей",
+    "free_checklist": "self-development-pro"
+  },
+  {
+    "id": "finance",
+    "title": "Финансы",
+    "icon": "💰",
+    "description": "Контроль денег, накопления, инвестиции и финансовая свобода",
+    "free_checklist": "finance-investing-pro"
+  },
+  {
+    "id": "relationships",
+    "title": "Отношения",
+    "icon": "❤️",
+    "description": "Знакомства, общение и построение прочных и сильных связей",
+    "free_checklist": "relationships-pro"
+  },
+  {
+    "id": "home",
+    "title": "Дом и быт",
+    "icon": "🏠",
+    "description": "Порядок, комфорт и организация повседневной жизни",
+    "free_checklist": "home-living-pro"
+  },
+  {
+    "id": "health",
+    "title": "Здоровье и энергия",
+    "icon": "🧍‍♂️",
+    "description": "Физическое состояние, сон, питание и уровень энергии",
+    "free_checklist": "health-energy-pro"
+  },
+  {
+    "id": "books",
+    "title": "Книги",
+    "icon": "📚",
+    "description": "Ключевые идеи из лучших книг и применение знаний на практике",
+    "free_checklist": "books-reading-pro"
+  },
+  {
+    "id": "work",
+    "title": "Работа и продуктивность",
+    "icon": "💼",
+    "description": "Фокус, эффективность и управление задачами",
+    "free_checklist": "work-productivity-pro"
+  },
+  {
+    "id": "lifestyle",
+    "title": "Образ жизни",
+    "icon": "✨",
+    "description": "Стиль жизни, привычки и повышение качества жизни",
+    "free_checklist": "lifestyle-design-pro"
+  },
+  {
+    "id": "travel",
+    "title": "Путешествия",
+    "icon": "🌍",
+    "description": "Поездки, планирование туров и новые впечатления",
+    "free_checklist": "travel-exploration-pro"
+  },
+  {
+    "id": "mindfulness",
+    "title": "Психология и осознанность",
+    "icon": "🧘",
+    "description": "Эмоции, мышление, внутреннее состояние и свобода",
+    "free_checklist": "psychology-mindfulness-pro"
+  }
+]

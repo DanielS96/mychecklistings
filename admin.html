@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админка Checklistings</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f2f2f7;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container { max-width: 900px; margin: 0 auto; }
+        
+        .header {
+            background: linear-gradient(135deg, #007aff, #5856d6);
+            color: white;
+            padding: 24px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 { font-size: 28px; }
+        .header p { opacity: 0.9; font-size: 14px; }
+        
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 10px;
+            background: white;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #666;
+            white-space: nowrap;
+        }
+        
+        .tab.active {
+            background: #007aff;
+            color: white;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 14px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        
+        .stat-card .number { font-size: 28px; font-weight: 800; }
+        .stat-card .label { font-size: 12px; color: #666; margin-top: 4px; }
+        
+        .revenue { background: linear-gradient(135deg, #ff9500, #ff6b00); color: white; }
+        .revenue .number { color: white; }
+        .revenue .label { color: rgba(255,255,255,0.8); }
+        
+        .blue { background: linear-gradient(135deg, #007aff, #5856d6); color: white; }
+        .blue .number { color: white; }
+        .blue .label { color: rgba(255,255,255,0.8); }
+        
+        .green { background: linear-gradient(135deg, #34c759, #30b350); color: white; }
+        .green .number { color: white; }
+        .green .label { color: rgba(255,255,255,0.8); }
+        
+        .purple { background: linear-gradient(135deg, #af52de, #5856d6); color: white; }
+        .purple .number { color: white; }
+        .purple .label { color: rgba(255,255,255,0.8); }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        
+        .card h3 { font-size: 18px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        
+        @media (max-width: 600px) {
+            .grid-2 { grid-template-columns: 1fr; }
+            .tabs { flex-direction: column; }
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 10px 12px;
+            text-align: left;
+            font-size: 13px;
+        }
+        
+        th {
+            background: #f2f2f7;
+            font-weight: 600;
+            color: #666;
+        }
+        
+        th:first-child { border-radius: 10px 0 0 10px; }
+        th:last-child { border-radius: 0 10px 10px 0; }
+        
+        tr { border-bottom: 1px solid #f2f2f7; }
+        
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .badge-hot { background: #ffe5e5; color: #ff3b30; }
+        .badge-good { background: #e8f8ed; color: #34c759; }
+        .badge-neutral { background: #f2f2f7; color: #666; }
+        .badge-warn { background: #fff3e0; color: #ff9500; }
+        
+        .ranking-list { }
+        
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 6px;
+            background: #f9f9f9;
+        }
+        
+        .ranking-position {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .position-1 { background: linear-gradient(135deg, #ffd700, #ffb800); }
+        .position-2 { background: linear-gradient(135deg, #c0c0c0, #a0a0a0); }
+        .position-3 { background: linear-gradient(135deg, #cd7f32, #b8702e); }
+        .position-other { background: #d0d0d0; color: #666; }
+        
+        .ranking-info { flex: 1; min-width: 0; }
+        .ranking-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+        
+        .ranking-bar {
+            height: 5px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .ranking-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #007aff, #34c759);
+            border-radius: 10px;
+        }
+        
+        .ranking-stats {
+            text-align: right;
+            flex-shrink: 0;
+        }
+        
+        .ranking-value { font-size: 14px; font-weight: 700; }
+        .ranking-sub { font-size: 11px; color: #999; }
+        
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            height: 180px;
+            padding: 10px 0;
+        }
+        
+        .bar-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .bar {
+            width: 100%;
+            max-width: 50px;
+            background: linear-gradient(180deg, #007aff, #5856d6);
+            border-radius: 6px 6px 0 0;
+            min-height: 4px;
+        }
+        
+        .bar-label { font-size: 10px; color: #666; text-align: center; }
+        .bar-value { font-size: 12px; font-weight: 700; }
+        
+        .empty { text-align: center; padding: 40px; color: #999; }
+        
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>📊 Checklistings</h1>
+                <p>Админ-панель v2.0</p>
+            </div>
+            <button class="btn" style="background:rgba(255,255,255,0.2);color:white;" onclick="loadData()">🔄</button>
+        </div>
+        
+        <!-- Вкладки -->
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('overview')">📋 Обзор</button>
+            <button class="tab" onclick="showTab('completed')">✅ Пройденные</button>
+            <button class="tab" onclick="showTab('opened')">👁 Открытые</button>
+            <button class="tab" onclick="showTab('categories')">📂 Категории</button>
+            <button class="tab" onclick="showTab('users')">👥 Пользователи</button>
+            <button class="tab" onclick="showTab('sales')">💰 Продажи</button>
+        </div>
+        
+        <!-- Обзор -->
+        <div id="tab-overview">
+            <div class="stats" id="stats-overview"></div>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>🏆 Топ пройденных</h3>
+                    <div id="top-completed"></div>
+                </div>
+                <div class="card">
+                    <h3>📅 Продажи по дням</h3>
+                    <div id="sales-chart"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Пройденные -->
+        <div id="tab-completed" style="display:none;">
+            <div class="card">
+                <h3>✅ Рейтинг пройденных чек-листов</h3>
+                <div class="ranking-list" id="ranking-completed"></div>
+            </div>
+        </div>
+        
+        <!-- Открытые -->
+        <div id="tab-opened" style="display:none;">
+            <div class="card">
+                <h3>👁 Рейтинг открытых (не законченных) чек-листов</h3>
+                <div class="ranking-list" id="ranking-opened"></div>
+            </div>
+        </div>
+        
+        <!-- Категории -->
+        <div id="tab-categories" style="display:none;">
+            <div class="card">
+                <h3>📂 Рейтинг категорий</h3>
+                <div class="ranking-list" id="ranking-categories"></div>
+            </div>
+        </div>
+        
+        <!-- Пользователи -->
+        <div id="tab-users" style="display:none;">
+            <div class="stats" id="stats-users"></div>
+            <div class="card">
+                <h3>👥 Последние посетители</h3>
+                <div id="recent-users"></div>
+            </div>
+        </div>
+        
+        <!-- Продажи -->
+        <div id="tab-sales" style="display:none;">
+            <div class="card">
+                <h3>💰 История продаж</h3>
+                <div id="sales-history"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const WORKER_URL = 'https://checklistings.dan-svistunov.workers.dev';
+        let allData = null;
+        
+        async function loadData() {
+            showLoading();
+            try {
+                const response = await fetch(`${WORKER_URL}/api/admin/stats`);
+                allData = await response.json();
+                renderAll();
+            } catch (e) {
+                console.error('Error:', e);
+                alert('Ошибка загрузки: ' + e.message);
+            }
+        }
+        
+        function showLoading() {
+            document.querySelectorAll('.ranking-list, [id^="top-"], [id^="sales-"], [id^="recent-"], [id^="stats-"]').forEach(el => {
+                if (el) el.innerHTML = '<div class="empty">Загрузка...</div>';
+            });
+        }
+        
+        function renderAll() {
+            renderOverview();
+            renderCompleted();
+            renderOpened();
+            renderCategories();
+            renderUsers();
+            renderSales();
+        }
+        
+        function renderOverview() {
+            const d = allData;
+            const convRate = d.total_users > 0 ? Math.round((d.unique_buyers / d.total_users) * 100) : 0;
+            const returnRate = d.total_users > 0 ? Math.round((d.returning_users / d.total_users) * 100) : 0;
+            
+            document.getElementById('stats-overview').innerHTML = `
+                <div class="stat-card blue"><div class="number">${d.total_users || 0}</div><div class="label">Всего пользователей</div></div>
+                <div class="stat-card purple"><div class="number">${d.returning_users || 0}</div><div class="label">Вернувшихся</div></div>
+                <div class="stat-card"><div class="number" style="color:#007aff;">${d.unique_buyers || 0}</div><div class="label">Покупателей</div></div>
+                <div class="stat-card revenue"><div class="number">${d.total_revenue || 0} ⭐</div><div class="label">Заработано</div></div>
+                <div class="stat-card green"><div class="number">${convRate}%</div><div class="label">Конверсия</div></div>
+                <div class="stat-card"><div class="number" style="color:#ff9500;">${returnRate}%</div><div class="label">Возврат</div></div>
+            `;
+            
+            // Топ пройденных
+            const completed = (allData.ranking || []).slice(0, 5);
+            const maxComp = completed.length > 0 ? completed[0].completions : 1;
+            
+            document.getElementById('top-completed').innerHTML = completed.length === 0 ? '<div class="empty">Нет данных</div>' :
+                completed.map((cl, i) => {
+                    const pct = Math.round((cl.completions / maxComp) * 100);
+                    const badge = i === 0 ? 'badge-hot' : i < 3 ? 'badge-good' : 'badge-neutral';
+                    return `
+                        <div style="margin-bottom:10px;">
+                            <div style="display:flex;justify-content:space-between;margin-bottom:3px;">
+                                <span style="font-size:12px;font-weight:500;">${i+1}. ${cl.title}</span>
+                                <span class="badge ${badge}">${cl.completions} раз</span>
+                            </div>
+                            <div class="ranking-bar"><div class="ranking-fill" style="width:${pct}%"></div></div>
+                        </div>
+                    `;
+                }).join('');
+            
+            // График продаж
+            const byDay = allData.sales_by_day || [];
+            const maxDay = byDay.length > 0 ? Math.max(...byDay.map(d => d.count)) : 1;
+            
+            document.getElementById('sales-chart').innerHTML = byDay.length === 0 ? '<div class="empty">Нет данных</div>' : `
+                <div class="bar-chart">
+                    ${byDay.slice(-7).map(day => {
+                        const h = Math.max(6, (day.count / maxDay) * 140);
+                        return `<div class="bar-item"><div class="bar-value">${day.count}</div><div class="bar" style="height:${h}px;"></div><div class="bar-label">${day.date}</div></div>`;
+                    }).join('')}
+                </div>
+            `;
+        }
+        
+        function renderCompleted() {
+            const ranking = allData.ranking || [];
+            const maxVal = ranking.length > 0 ? ranking[0].completions : 1;
+            
+            document.getElementById('ranking-completed').innerHTML = ranking.length === 0 ? '<div class="empty">Нет прохождений</div>' :
+                ranking.map((cl, i) => {
+                    const pos = i + 1;
+                    const pct = Math.round((cl.completions / maxVal) * 100);
+                    let posClass = 'position-other', medal = pos;
+                    if (pos === 1) { posClass = 'position-1'; medal = '🥇'; }
+                    else if (pos === 2) { posClass = 'position-2'; medal = '🥈'; }
+                    else if (pos === 3) { posClass = 'position-3'; medal = '🥉'; }
+                    
+                    return `
+                        <div class="ranking-item">
+                            <div class="ranking-position ${posClass}">${medal}</div>
+                            <div class="ranking-info">
+                                <div class="ranking-title">${cl.title || cl.checklist_id}</div>
+                                <div class="ranking-bar"><div class="ranking-fill" style="width:${pct}%"></div></div>
+                            </div>
+                            <div class="ranking-stats">
+                                <div class="ranking-value">${cl.completions}</div>
+                                <div class="ranking-sub">раз</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+        }
+        
+    function renderOpened() {
+    const opened = allData.opened_ranking || [];
+    // Сортируем по not_completed (открытые, но не пройденные)
+    const sorted = opened.sort((a, b) => (b.not_completed || 0) - (a.not_completed || 0));
+    const maxVal = sorted.length > 0 ? Math.max(...sorted.map(o => o.not_completed || 0)) : 1;
+    
+    document.getElementById('ranking-opened').innerHTML = sorted.length === 0 ? '<div class="empty">Нет открытий</div>' :
+        sorted.map((cl, i) => {
+            const pos = i + 1;
+            const pct = Math.round(((cl.not_completed || 0) / maxVal) * 100);
+            let posClass = 'position-other', medal = pos;
+            if (pos === 1) { posClass = 'position-1'; medal = '🥇'; }
+            else if (pos === 2) { posClass = 'position-2'; medal = '🥈'; }
+            else if (pos === 3) { posClass = 'position-3'; medal = '🥉'; }
+            
+            return `
+                <div class="ranking-item">
+                    <div class="ranking-position ${posClass}">${medal}</div>
+                    <div class="ranking-info">
+                        <div class="ranking-title">${cl.title || cl.checklist_id}</div>
+                        <div class="ranking-bar"><div class="ranking-fill" style="width:${pct}%"></div></div>
+                    </div>
+                    <div class="ranking-stats">
+                        <div class="ranking-value">${cl.not_completed || 0}</div>
+                        <div class="ranking-sub">открыто (не пройдено)</div>
+                        <div style="font-size:10px;color:#999;">всего открытий: ${cl.opens || 0}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+}
+        
+        function renderCategories() {
+            const cats = allData.categories_ranking || [];
+            const maxVal = cats.length > 0 ? cats[0].opens : 1;
+            
+            document.getElementById('ranking-categories').innerHTML = cats.length === 0 ? '<div class="empty">Нет данных</div>' :
+                cats.map((cat, i) => {
+                    const pos = i + 1;
+                    const pct = Math.round((cat.opens / maxVal) * 100);
+                    let posClass = 'position-other', medal = pos;
+                    if (pos === 1) { posClass = 'position-1'; medal = '🥇'; }
+                    else if (pos === 2) { posClass = 'position-2'; medal = '🥈'; }
+                    else if (pos === 3) { posClass = 'position-3'; medal = '🥉'; }
+                    
+                    return `
+                        <div class="ranking-item">
+                            <div class="ranking-position ${posClass}">${medal}</div>
+                            <div class="ranking-info">
+                                <div class="ranking-title">${cat.icon || ''} ${cat.title || cat.category}</div>
+                                <div class="ranking-bar"><div class="ranking-fill" style="width:${pct}%"></div></div>
+                            </div>
+                            <div class="ranking-stats">
+                                <div class="ranking-value">${cat.opens}</div>
+                                <div class="ranking-sub">открытий</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+        }
+        
+        function renderUsers() {
+            const d = allData;
+            const returnRate = d.total_users > 0 ? Math.round((d.returning_users / d.total_users) * 100) : 0;
+            
+            document.getElementById('stats-users').innerHTML = `
+                <div class="stat-card blue"><div class="number">${d.total_users || 0}</div><div class="label">Всего</div></div>
+                <div class="stat-card purple"><div class="number">${d.returning_users || 0}</div><div class="label">Вернувшихся</div></div>
+                <div class="stat-card green"><div class="number">${returnRate}%</div><div class="label">% возврата</div></div>
+                <div class="stat-card"><div class="number" style="color:#007aff;">${d.avg_visits || 0}</div><div class="label">Среднее посещений</div></div>
+            `;
+            
+            const users = allData.recent_visitors || [];
+            
+            document.getElementById('recent-users').innerHTML = users.length === 0 ? '<div class="empty">Нет данных</div>' : `
+                <table>
+                    <tr><th>User ID</th><th>Имя</th><th>Посещений</th><th>Последний визит</th></tr>
+                    ${users.slice(0, 15).map(u => `
+                        <tr>
+                            <td>${u.user_id}</td>
+                            <td>${u.first_name || '-'}</td>
+                            <td><span class="badge ${u.visit_count > 2 ? 'badge-good' : 'badge-neutral'}">${u.visit_count}</span></td>
+                            <td>${u.last_seen_date || '-'}</td>
+                        </tr>
+                    `).join('')}
+                </table>
+            `;
+        }
+        
+        function renderSales() {
+            const buyers = allData.recent_buyers || [];
+            
+            document.getElementById('sales-history').innerHTML = buyers.length === 0 ? '<div class="empty">Нет продаж</div>' : `
+                <table>
+                    <tr><th>User ID</th><th>Чек-лист</th><th>Сумма</th><th>Дата</th></tr>
+                    ${buyers.slice(0, 20).map(u => `
+                        <tr>
+                            <td>${u.user_id}</td>
+                            <td>${u.checklist_title || u.checklist_id}</td>
+                            <td>${u.amount} ⭐</td>
+                            <td>${u.date}</td>
+                        </tr>
+                    `).join('')}
+                </table>
+            `;
+        }
+        
+        function showTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('[id^="tab-"]').forEach(t => t.style.display = 'none');
+            event.target.classList.add('active');
+            document.getElementById('tab-' + tab).style.display = 'block';
+        }
+        
+        loadData();
+    </script>
+</body>
+</html>

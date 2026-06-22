@@ -1,0 +1,329 @@
+body {
+  margin:0;
+  font-family:-apple-system;
+  background:#f2f2f7;
+}
+
+#app {
+  max-width:700px;
+  margin:auto;
+  padding:16px;
+}
+
+/* DASHBOARD */
+.dashboard {
+  background:linear-gradient(135deg,#007aff,#34c759);
+  color:white;
+  border-radius:20px;
+  padding:20px;
+  margin-bottom:16px;
+}
+
+.dashboard-title {
+  font-size:14px;
+  opacity:0.9;
+}
+
+.dashboard-level {
+  font-size:22px;
+  font-weight:700;
+  margin-top:4px;
+}
+
+.dashboard-bar {
+  margin-top:12px;
+  height:10px;
+  background:rgba(255,255,255,0.3);
+  border-radius:10px;
+  overflow:hidden;
+}
+
+.dashboard-fill {
+  height:100%;
+  background:white;
+  border-radius:10px;
+  transition:width 0.4s;
+}
+
+/* CARD */
+.card {
+  background:white;
+  border-radius:20px;
+  padding:16px;
+  margin-bottom:12px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.06);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  animation: fadeInUp 0.4s ease;
+}
+
+.card:active {
+  transform: scale(0.97);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+
+/* CATEGORY */
+.category-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.category-title {
+  font-weight:700;
+}
+
+.category-percent {
+  font-size:12px;
+  color:#999;
+}
+
+/* STATUS RIGHT */
+.card-row {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.status {
+  font-size:11px;
+  font-weight:500;
+  padding:4px 8px;
+  border-radius:999px;
+  white-space:nowrap;
+}
+
+.status.new {
+  background:rgba(0,122,255,0.12);
+  color:#007aff;
+}
+
+.status.progress {
+  background:rgba(255,149,0,0.12);
+  color:#ff9500;
+}
+
+.status.done {
+  background:rgba(52,199,89,0.12);
+  color:#34c759;
+}
+
+/* PROGRESS */
+.progress-bar {
+  height:10px;
+  background:#eee;
+  border-radius:999px;
+  overflow:hidden;
+}
+
+.progress-fill {
+  height:100%;
+  background:#34c759;
+  border-radius:999px;
+  transition:width 0.5s ease;
+}
+
+/* BUTTONS */
+.btn {
+  padding:12px;
+  border-radius:14px;
+  border:none;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.btn-primary {
+  background:linear-gradient(135deg,#007aff,#5856d6);
+  color:white;
+}
+
+.btn-ghost {
+  background:none;
+  color:#007aff;
+}
+
+.btn:disabled {
+  opacity:0.5;
+  cursor:not-allowed;
+}
+
+/* MODAL */
+.modal {
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.4);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:1000;
+}
+
+.modal-content {
+  background:white;
+  padding:20px;
+  border-radius:20px;
+  max-width:320px;
+  text-align:center;
+}
+
+/* ITEM */
+.item {
+  background:white;
+  border-radius:16px;
+  margin-bottom:10px;
+  box-shadow:0 3px 10px rgba(0,0,0,0.04);
+  animation: fadeInUp 0.3s ease;
+}
+
+.item-header {
+  padding:14px;
+  display:flex;
+  justify-content:space-between;
+  cursor:pointer;
+  font-weight:500;
+  font-size:15px;
+}
+
+.item-header::after {
+  content:"›";
+}
+
+.item.open .item-header::after {
+  transform:rotate(90deg);
+}
+
+.item-body {
+  display:none;
+  padding:14px;
+  animation: fadeIn 0.25s ease;
+}
+
+.item-body p {
+  margin:0;
+  line-height:1.5;
+  font-size:14px;
+}
+
+/* QUIZ */
+.quiz-section {
+  margin-top:24px;
+}
+
+.quiz-title {
+  font-size:18px;
+  font-weight:700;
+  margin-bottom:12px;
+}
+
+.quiz-question {
+  background:white;
+  padding:14px;
+  border-radius:16px;
+  margin-bottom:10px;
+}
+
+.quiz-question p {
+  font-size:15px;
+  font-weight:600;
+  margin-bottom:8px;
+}
+
+.quiz-option {
+  display:block;
+  padding:12px;
+  border:1px solid #eee;
+  border-radius:10px;
+  margin-bottom:6px;
+  font-size:14px;
+}
+
+/* TYPOGRAPHY */
+h2 {
+  font-size:22px;
+  margin-bottom:6px;
+}
+
+.checklist-description {
+  font-size:14px;
+  color:#666;
+  margin-bottom:12px;
+}
+
+.checklist-subtitle {
+  font-size:13px;
+  color:#666;
+  margin-top:4px;
+  line-height:1.4;
+}
+
+/* PRICE TAG */
+.price-tag {
+  font-size:13px;
+  font-weight:600;
+  color:#ff9500;
+  margin-top:6px;
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+  from { opacity:0 }
+  to { opacity:1 }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity:0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity:1;
+    transform: translateY(0);
+  }
+}
+
+
+
+
+
+/* Анимированный градиент для дашборда */
+.dashboard {
+  background: linear-gradient(135deg, #007aff, #34c759, #5856d6, #007aff);
+  background-size: 300% 300%;
+  animation: gradientShift 8s ease infinite;
+}
+
+/* Градиент для кнопок */
+.btn-primary {
+  background: linear-gradient(135deg, #007aff, #5856d6, #007aff);
+  background-size: 200% 200%;
+  animation: gradientShift 6s ease infinite;
+}
+
+/* Легкий градиент для карточек категорий при наведении */
+.card.category {
+  transition: all 0.3s ease;
+}
+
+.card.category:hover {
+  background: linear-gradient(135deg, #ffffff, #f0f4ff);
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 100% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  75% {
+    background-position: 0% 100%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
