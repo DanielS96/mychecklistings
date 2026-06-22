@@ -1,0 +1,38 @@
+name: Auto Index JSON
+
+on:
+  push:
+    paths:
+      - 'data/**'
+
+jobs:
+  update-index:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Generate index.json for each category
+        run: |
+          for dir in data/*/ ; do
+            if [ -d "$dir" ]; then
+              echo "Processing $dir"
+
+              files=$(find "$dir" -maxdepth 1 -type f -name "*.json" ! -name "index.json" -printf "%f\n")
+
+              if [ -z "$files" ]; then
+                echo "[]" > "${dir}index.json"
+              else
+                echo "$files" | jq -R . | jq -s . > "${dir}index.json"
+              fi
+            fi
+          done
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add data/**/index.json
+          git commit -m "auto update index.json" || echo "No changes"
+          git push
